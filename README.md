@@ -8,6 +8,7 @@ Simple environment extension to Golang flag.
 ## Goals 
 - Extends Golang flag with environment-variables.
 - Clear precendence: `default` < `environment-variable` < `cli`.
+- Adheres to `12-factor-app`.
 
 ## Installation 
 
