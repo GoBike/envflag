@@ -40,14 +40,21 @@ func main() {
 }
 ```
 
-With environment variable set.
+Run with `default`.
+
+```sh
+$ go run main.go 
+1 #output
+```
+
+Run with `environment-variable` set.
 
 ```sh
 $ F_TIMES=100 go run main.go 
 100 #output
 ```
 
-With cli set.
+Run with `cli` set.
 
 ```sh
 $ go run main.go --f-times=10 
