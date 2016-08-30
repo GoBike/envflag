@@ -57,6 +57,6 @@ $ F_TIMES=100 go run main.go
 Run with `cli` set.
 
 ```sh
-$ go run main.go --f-times=10 
-10 #output
+$ F_TIMES=100 go run main.go --f-times=10 
+10 #output, environment-variable is ignored
 ```
