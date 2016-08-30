@@ -7,6 +7,7 @@ import (
 )
 
 func setupFlag(options flagOption) *Envflag {
+	os.Clearenv()
 	cli := flag.NewFlagSet(os.Args[0], flag.ExitOnError)
 	options(cli)
 	return &Envflag{
@@ -46,6 +47,10 @@ func TestTwoFlagsOneUnset(t *testing.T) {
 	if want, got := 1, len(ef.unsetFlags()); want != got {
 		t.Errorf("expects only %v unset flag, got %v intead.", want, got)
 	}
+}
+
+func TestPrecendence(t *testing.T) {
+
 }
 
 // flagOption for testing purposes -- visibility

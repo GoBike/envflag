@@ -2,8 +2,8 @@ package envflag
 
 import (
 	"flag"
-	"fmt"
 	"os"
+	"strings"
 )
 
 // Envflag is a environment-variable wrapper for flag.FlagSet.
@@ -31,13 +31,20 @@ func (e Envflag) parseWithEnv(args []string) {
 		e.Cli.Parse(args)
 	}
 
-	for name, ok := range e.unsetFlags() {
-		fmt.Println(name, ok)
+	for name := range e.unsetFlags() {
+		if val, ok := os.LookupEnv(maskEnvName(name)); ok {
+			e.Cli.Set(name, val)
+		}
 	}
+}
 
-	if !e.Cli.Parsed() {
-		e.Cli.Parse(args)
-	}
+// maskEnvName returns a qualified environement variable, naming convention.
+func maskEnvName(flagname string) string {
+	var ret string
+
+	ret = strings.Replace(flagname, "-", "_", -1)
+	ret = strings.Replace(flagname, ".", "_", -1)
+	return strings.ToUpper(ret)
 }
 
 // unsetFlags returns flag-values that hasn't been set via CLI.
