@@ -17,13 +17,13 @@ func setupFlag(options flagOption) *Envflag {
 
 // declare one flag, assigns value via cli, expects empty unsetFlags
 func TestOneSetFlag(t *testing.T) {
-	var testInt int
+	var testVal string
 
 	ef := setupFlag(func(fs *flag.FlagSet) {
-		fs.IntVar(&testInt, "test-int", 1, "this is test int")
+		fs.StringVar(&testVal, "test-flag", "default-value", "this is test flag")
 	})
 
-	ef.parseWithEnv([]string{"--test-int=100"})
+	ef.parseWithEnv([]string{"--test-flag=dummy"})
 
 	if want, got := 0, len(ef.unsetFlags()); want != got {
 		t.Errorf("expects only %v unset flag, got %v intead.", want, got)
@@ -45,12 +45,55 @@ func TestTwoFlagsOneUnset(t *testing.T) {
 	ef.parseWithEnv([]string{"--test-int-one=100"})
 
 	if want, got := 1, len(ef.unsetFlags()); want != got {
-		t.Errorf("expects only %v unset flag, got %v intead.", want, got)
+		t.Errorf("expects only %v unset flag, got %v.", want, got)
 	}
 }
 
+// default < env < cli
 func TestPrecendence(t *testing.T) {
 
+	var (
+		testVal    string
+		envVal     = "envValue"
+		cliVal     = "cliValue"
+		defaultVal = "defaultValue"
+		// testIntTwo int
+	)
+
+	// cli
+	ef := setupFlag(func(fs *flag.FlagSet) {
+		fs.StringVar(&testVal, "test-flag", defaultVal, "this is test flag")
+	})
+
+	os.Setenv("TEST_FLAG", envVal)
+	ef.parseWithEnv([]string{
+		"--test-flag=" + cliVal,
+	})
+
+	if want, got := cliVal, testVal; want != got {
+		t.Errorf("expects flag-value be overriden by (cli)%v, got %v.", want, got)
+	}
+
+	// env
+	ef = setupFlag(func(fs *flag.FlagSet) {
+		fs.StringVar(&testVal, "test-flag", defaultVal, "this is test flag")
+	})
+	os.Setenv("TEST_FLAG", envVal)
+
+	ef.parseWithEnv([]string{}) // empty cli
+	if want, got := envVal, testVal; want != got {
+		t.Errorf("expects flag-value be overriden by (env)%v, got %v.", want, got)
+	}
+
+	// default
+	ef = setupFlag(func(fs *flag.FlagSet) {
+		fs.StringVar(&testVal, "test-flag", defaultVal, "this is test flag")
+	})
+
+	ef.parseWithEnv([]string{}) // empty cli
+	if want, got := defaultVal, testVal; want != got {
+		t.Errorf("expects flag-value be overriden by (env)%v, got %v.", want, got)
+	}
 }
 
 // flagOption for testing purposes -- visibility

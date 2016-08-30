@@ -43,7 +43,7 @@ func maskEnvName(flagname string) string {
 	var ret string
 
 	ret = strings.Replace(flagname, "-", "_", -1)
-	ret = strings.Replace(flagname, ".", "_", -1)
+	ret = strings.Replace(ret, ".", "_", -1)
 	return strings.ToUpper(ret)
 }
 
