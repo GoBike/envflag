@@ -24,7 +24,7 @@ func (e Envflag) Parse() {
 }
 
 // parseWithEnv first parses cli-values into flag-values. Next, for any unset
-// flag-values, it attemps to lookup and load from environment variables, by flag-name.
+// flag-values, it attempts to lookup and load from environment variables, by flag-name.
 func (e Envflag) parseWithEnv(args []string) {
 
 	if !e.Cli.Parsed() {

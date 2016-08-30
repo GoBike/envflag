@@ -71,7 +71,7 @@ func TestPrecendence(t *testing.T) {
 	})
 
 	if want, got := cliVal, testVal; want != got {
-		t.Errorf("expects flag-value be overriden by (cli)%v, got %v.", want, got)
+		t.Errorf("expects flag-value be overridden by (cli)%v, got %v.", want, got)
 	}
 
 	// env
@@ -82,7 +82,7 @@ func TestPrecendence(t *testing.T) {
 
 	ef.parseWithEnv([]string{}) // empty cli
 	if want, got := envVal, testVal; want != got {
-		t.Errorf("expects flag-value be overriden by (env)%v, got %v.", want, got)
+		t.Errorf("expects flag-value be overridden by (env)%v, got %v.", want, got)
 	}
 
 	// default
@@ -92,7 +92,7 @@ func TestPrecendence(t *testing.T) {
 
 	ef.parseWithEnv([]string{}) // empty cli
 	if want, got := defaultVal, testVal; want != got {
-		t.Errorf("expects flag-value be overriden by (env)%v, got %v.", want, got)
+		t.Errorf("expects flag-value be overridden by (env)%v, got %v.", want, got)
 	}
 }
 
